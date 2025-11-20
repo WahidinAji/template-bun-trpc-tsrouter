@@ -1,0 +1,51 @@
+# mono
+
+To install dependencies:
+
+```bash
+bun install
+```
+
+To run:
+
+```bash
+bun run index.ts
+```
+
+This project was created using `bun init` in bun v1.2.14. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+
+
+# TODO
+
+- [ ] Complete the scripts for build the APP
+
+  example from https://github.com/trpc/trpc/blob/main/examples/bun/package.json
+  ```json
+  {
+    "name": "examples-bun",
+    "private": true,
+    "scripts": {
+      "build": "bun build src/index.ts --outdir ./dist && bun build src/client.ts --outdir ./dist",
+      "dev:server": "bun run src/index.ts --watch",
+      "dev:client": "wait-port 3000 && bun run src/client.ts --watch",
+      "start:server": "bun run dist/index.js",
+      "start:client": "wait-port 3000 && bun run dist/client.js",
+      "lint": "eslint src",
+      "test-dev": "start-server-and-test 'bun run src/index.ts' 3000 'bun run src/client.ts'",
+      "test-start": "start-server-and-test 'bun run dist/index.js' 3000 'bun run dist/client.js'",
+      "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+      "@trpc/client": "npm:@trpc/client",
+      "@trpc/server": "npm:@trpc/server"
+    },
+    "devDependencies": {
+      "@types/bun": "^1.1.12",
+      "eslint": "^9.26.0",
+      "start-server-and-test": "^1.12.0",
+      "typescript": "^5.9.2",
+      "wait-port": "^1.0.1"
+    },
+    "version": "11.7.1"
+  }
+  ```
