@@ -18,12 +18,16 @@
     "@tanstack/react-router-devtools": "^1.136.8",
     "@trpc/client": "^11.7.1",
     "@trpc/server": "^11.7.1",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
     "cors": "^2.8.5",
+    "react-dom": "^19.2.0",
     "zod": "^4.1.12"
   },
   "scripts": {
-    "dev": "concurrently \"bun run index.ts\" \"wait-port 3000 && bun --bun run client.ts\"",
-    "dev:server": "bun run index.ts",
-    "dev:client": "wait-port 3000 && bun --bun run client/index.ts"
+    "dev": "concurrently \"bun --hot run server.ts\" \"wait-port 3000 && bun --bun run client.ts\"",
+    "dev:server": "bun run server.ts",
+    "dev:client": "wait-port 3000 && bun --bun run client/index.ts",
+    "dev:vite": "concurrently \"bun run server.ts\" \"wait-port 3000 && bun --bun run vite --port 3000\""
   }
 }

@@ -1,5 +1,5 @@
 import { createTRPCClient, httpBatchLink, loggerLink } from '@trpc/client';
-import type { AppRouter } from './index.ts';
+import type { AppRouter } from './server.ts';
 
 async function delay(ms: number) {
   return new Promise((resolve) => {

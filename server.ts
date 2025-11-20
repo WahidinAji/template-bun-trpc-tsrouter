@@ -54,7 +54,8 @@
 // server.listen(3000)
 
 
-import { initTRPC } from '@trpc/server';
+import { initTRPC, TRPCError } from '@trpc/server';
+import { createHTTPServer } from '@trpc/server/adapters/standalone';
 import { z } from 'zod';
 
 let id = 0;
@@ -92,31 +93,64 @@ export const appRouter = router({
   hello: publicProcedure.input(z.string().nullish()).query(({ input }) => {
     return `hello ${input ?? 'world'}`;
   }),
+  shoulderr: publicProcedure.query(() => {
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'something went wrong',
+      cause: new Error('something went wrong'),
+    })
+  })
 });
 export type AppRouter = typeof appRouter;
 
+import cors from 'cors';
+createHTTPServer({
+  middleware: cors(),
+  router: appRouter,
+  basePath: "/trpc/"
+}).listen(3000);
 
-import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-// import { appRouter } from './router';
+// import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
+// Bun.serve({
+//   port: 3000,
+//   fetch(req) {
+//     if (req.method === 'HEAD') {
+//       return new Response();
+//     }
 
-Bun.serve({
-  port: 3000,
-  fetch(request) {
-    // Only used for start-server-and-test package that
-    // expects a 200 OK to start testing the server
-    if (request.method === 'HEAD') {
-      return new Response();
-    }
+//     if (new URL(req.url).pathname === '/') {
+//       return new Response('hello world');
+//     }
+//     return fetchRequestHandler({
+//       endpoint: '/trpc',
+//       req: req,
+//       router: appRouter,
+//       createContext: () => ({}),
+//     });
+//   }
+// })
 
-    if (new URL(request.url).pathname === '/') {
-      return new Response('hello world');
-    }
 
-    return fetchRequestHandler({
-      endpoint: '/trpc',
-      req: request,
-      router: appRouter,
-      createContext: () => ({}),
-    });
-  },
-});
+// // import { appRouter } from './router';
+
+// Bun.serve({
+//   port: 3000,
+//   fetch(request) {
+//     // Only used for start-server-and-test package that
+//     // expects a 200 OK to start testing the server
+//     if (request.method === 'HEAD') {
+//       return new Response();
+//     }
+
+//     if (new URL(request.url).pathname === '/') {
+//       return new Response('hello world');
+//     }
+
+//     return fetchRequestHandler({
+//       endpoint: '/trpc',
+//       req: request,
+//       router: appRouter,
+//       createContext: () => ({}),
+//     });
+//   },
+// });
